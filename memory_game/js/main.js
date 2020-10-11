@@ -1,15 +1,5 @@
 "use strict";
 
-// function compareArrays(arr1, arr2) {
-//     if (arr1.length != arr2.length) {
-//         return false;
-//     }
-//     for (el1 of arr1) {
-//         for 
-//     }
-//     return true;
-// }
-
 /* Global vars */
 let transitionDuration = "0.5s";
 /* End of global vars */
@@ -73,6 +63,7 @@ function createField(fieldSize) {
                 y: y_coords[i],
                 value: vals[contIndex],
                 node: null,
+                opened: false,
             }
         );
         contIndex += 1;
@@ -126,17 +117,20 @@ function setCellStyles(field) {
 function setCellFunctionallity(field) {
     let toggled = [];
     field.forEach(el => {
-        el.node.addEventListener("click", function (event) {
+        const clickFunction = function (event) {
             el.node.classList.toggle("rotated");
             const delayedPushCheck = () => {
+                console.log(this)
                 toggled.push(el);
                 if (toggled.length == 2) {
                     if (toggled[0] != toggled[1]) {
                         if (toggled[0].value == toggled[1].value) {
                             console.log("equal")
                             console.log(toggled[0].value, toggled[1].value);
-                            toggled[0].node.removeEventListener("click", this);
-                            toggled[1].node.removeEventListener("click", this);
+                            toggled[0].node.removeEventListener("click", clickFunction);
+                            toggled[1].node.removeEventListener("click", clickFunction);
+                            toggled[0].opened = true;
+                            toggled[1].opened = true;
                             toggled = [];
 
                         }
@@ -150,115 +144,20 @@ function setCellFunctionallity(field) {
                     else {
                         console.log('equal links')
                         toggled = [];
-                        console.log(toggled)
                     }
+                }
+                const opened = field.filter( el => el.opened == true);
+                if (opened.length == field.length) {
+                    alert("You won!");
                 }
             };
             const transDurationNum = Number(transitionDuration.split("s")[0]) * 1000;
-            setTimeout(delayedPushCheck,transDurationNum);
-        });
-        // el.node.addEventListener("transitionend", function () {
-        //     if (toggled.length == 1) {
-        //         toggled.push(el);
-        //         if (toggled[0] != toggled[1]) {
-        //             if (toggled[0].value == toggled[1].value) {
-        //                 console.log("It's a match!")
-        //                 toggled[0].node.removeEventListener("click", clickFunction);
-        //                 toggled[1].node.removeEventListener("click", clickFunction);
-        //                 toggled = [];
-        //                 ending = true;
-        //             }
-        //             else if (toggled[0].value != toggled[1].value) {
-        //                 toggled[0].node.classList.toggle("rotated");
-        //                 toggled[1].node.classList.toggle("rotated");
-        //                 console.log("No match");
-        //                 toggled = [];
-        //                 ending = true;
-        //             }
-        //             else {
-        //                 if (!ending) {
-        //                     toggled.push(el);
-        //                     console.log("Pushing");
-        //                 }
-        //                 ending = false;
-        //             }
-        //         }
-        //     }
-        // });
-    });
+            setTimeout(delayedPushCheck, transDurationNum);
+        };
+    el.node.addEventListener("click", clickFunction);
+});
 }
 
-const field = createField(4);
+const field = createField(2);
 const cells = document.querySelectorAll(".field-cell");
 cells.forEach(el => { el.style.transitionDuration = transitionDuration });
-
-// function fillField(field) {
-//     const x_vals = [];
-//     const y_vals = [];
-//     const fieldValues = [];
-//     const fieldSize = field.length;
-//     for (let counter = 0; counter < fieldSize; counter++) {
-//         fieldValues.push(counter);
-//     }
-//     for (let i = 0; i < fieldSize / 2; i++) {
-//         let x = generateRandomInteger(0, fieldSize);
-//         const condition = !x_vals[]
-//         if (!pairs.includes(number)) {
-//             number.push(pairs);
-
-//         }
-//     }
-//     for (item of field) {
-//         item.x
-//     }
-// }
-
-// for (let j = 0; j< 30; j++) {
-//     console.log(generateRandomInteger(0, 4));
-// }
-
-/*-----*/
-
-// function compareArrays(arr1, arr2) {
-//     let ln1 = arr1.length;
-//     let ln2 = arr2.length;
-//     if (ln1 != ln2) {
-//         return false;
-//     }
-//     for (let i = 0; i < ln1; i++) {
-//         let arr
-//         for (key in arr[i])
-//         if (arr1[i])
-//     }
-// }
-
-
-// function countRepeats(str) {
-//     let ln = str.length;
-//     const map = {};
-//     for (let i = 0; i < ln; i++) {
-//         let tmp = str[i];
-//         if (str.tmp !== undefined) {
-//             map.tmp += 1;
-//         }
-//         else {
-//             map.tmp = 1;
-//         }
-//     }
-//     return map;
-// }
-
-
-// function compareStrings(str1, str2) {
-//     let ln1 = str1.length;
-//     let ln2 = str2.length;
-//     const map = {};
-//     if(ln1 != ln2) {
-//         return false;
-//     }
-//     const repeats1 = countRepeats(str1);
-//     const repeats2 = countRepeats(str2);
-//     const result = compareArrays(repeats1, repeats2);
-//     return result;
-// }
-
