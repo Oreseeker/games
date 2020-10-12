@@ -116,46 +116,49 @@ function setCellStyles(field) {
 
 function setCellFunctionallity(field) {
     let toggled = [];
-    field.forEach(el => {
-        const clickFunction = function (event) {
-            el.node.classList.toggle("rotated");
-            const delayedPushCheck = () => {
-                console.log(this)
-                toggled.push(el);
-                if (toggled.length == 2) {
-                    if (toggled[0] != toggled[1]) {
-                        if (toggled[0].value == toggled[1].value) {
-                            console.log("equal")
-                            console.log(toggled[0].value, toggled[1].value);
-                            toggled[0].node.removeEventListener("click", clickFunction);
-                            toggled[1].node.removeEventListener("click", clickFunction);
-                            toggled[0].opened = true;
-                            toggled[1].opened = true;
-                            toggled = [];
+    const clickFunction = function (event) {
+        console.log(event)
+        let el = event.path.find(el => el.classList.contains("field-cell"));
+        el = field.find(element => element.node == el);
+        console.log(el);
+        el.node.classList.toggle("rotated");
+        const delayedPushCheck = () => {
+            toggled.push(el);
+            if (toggled.length == 2) {
+                if (toggled[0].node != toggled[1].node) {
+                    if (toggled[0].value == toggled[1].value) {
+                        console.log("equal")
+                        console.log(toggled[0], toggled[1]);
+                        toggled[0].node.removeEventListener("click", clickFunction);
+                        toggled[1].node.removeEventListener("click", clickFunction);
+                        toggled[0].opened = true;
+                        toggled[1].opened = true;
+                        toggled = [];
 
-                        }
-                        else {
-                            console.log("Not equal")
-                            toggled[0].node.classList.toggle("rotated");
-                            toggled[1].node.classList.toggle("rotated");
-                            toggled = [];
-                        }
                     }
                     else {
-                        console.log('equal links')
+                        console.log("Not equal")
+                        toggled[0].node.classList.toggle("rotated");
+                        toggled[1].node.classList.toggle("rotated");
                         toggled = [];
                     }
                 }
-                const opened = field.filter( el => el.opened == true);
-                if (opened.length == field.length) {
-                    alert("You won!");
+                else {
+                    console.log('equal links')
+                    toggled = [];
                 }
-            };
-            const transDurationNum = Number(transitionDuration.split("s")[0]) * 1000;
-            setTimeout(delayedPushCheck, transDurationNum);
+            }
+            const opened = field.filter(el => el.opened == true);
+            if (opened.length == field.length) {
+                alert("You won!");
+            }
         };
-    el.node.addEventListener("click", clickFunction);
-});
+        const transDurationNum = Number(transitionDuration.split("s")[0]) * 1000;
+        setTimeout(delayedPushCheck, transDurationNum);
+    };
+    field.forEach(el => {
+        el.node.addEventListener("click", clickFunction);
+    });
 }
 
 const field = createField(2);
