@@ -75,8 +75,8 @@ function createField(fieldSize) {
         return accumulator
     };
     field.reduce(reducer, 0);
-    setCellStyles(field);
-    setCellFunctionallity(field);
+    setStyles(field);
+    setFunctionallity(field);
     return field;
 }
 
@@ -103,18 +103,20 @@ function createFieldDOM(field) {
     return fieldCellsArr;
 }
 
-function setCellStyles(field) {
+function setStyles(field) {
     const fieldSize = Math.sqrt(field.length);
-    const cellSize = (100 - 4 * fieldSize) / fieldSize;
+    const cellSize = (100 - (fieldSize+1)) / fieldSize;
     const fieldDOM = document.querySelector(".field");
     const gridStyle = `repeat(${fieldSize}, ${cellSize}%)`;
-    const height = document.defaultView.getComputedStyle(fieldDOM).width;
+    fieldDOM.style.height = document.defaultView.getComputedStyle(fieldDOM).width;
+    window.addEventListener('resize', () => {
+        fieldDOM.style.height = document.defaultView.getComputedStyle(fieldDOM).width;
+    });
     fieldDOM.style.gridTemplateColumns = gridStyle;
     fieldDOM.style.gridTemplateRows = gridStyle;
-    fieldDOM.style.height = height;
 }
 
-function setCellFunctionallity(field) {
+function setFunctionallity(field) {
     let toggled = [];
     const clickFunction = function (event) {
         console.log(event)
@@ -161,6 +163,14 @@ function setCellFunctionallity(field) {
     });
 }
 
-const field = createField(2);
-const cells = document.querySelectorAll(".field-cell");
-cells.forEach(el => { el.style.transitionDuration = transitionDuration });
+function initSession() {
+    let fieldSize = 0;
+    while (!(fieldSize >= 2 && fieldSize <= 12 && fieldSize % 2 == 0)) {
+        fieldSize = prompt("Укажите размер поля (чётное число; будет создано поле размером n x n)", 4);
+    }
+    const field = createField(fieldSize);
+    const cells = document.querySelectorAll(".field-cell");
+    cells.forEach(el => { el.style.transitionDuration = transitionDuration });
+}
+
+initSession();
