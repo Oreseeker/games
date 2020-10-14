@@ -20,12 +20,15 @@
             margin: 0 auto;
         }
         .field-cell {
-            border: 4px solid #755d22;
             position: relative;
             transition-property: transform;
             transition-timing-function: ease-out;
             transform-style: preserve-3d;
+            cursor: pointer;
         }
+        /* .field-cell:hover {
+            transform: scale(1.05);
+        } */
         .cell-content-front {
             height: 100%;
             width: 100%;
@@ -43,7 +46,6 @@
             height: 100%;
             width: 100%;
             position: absolute;
-            background-color: #508bde;
             background-image: url("images/brown.jpg");
             background-size: 100% 100%;
             background-repeat: no-repeat;

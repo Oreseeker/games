@@ -119,8 +119,7 @@ function setStyles(field) {
 function setFunctionallity(field) {
     let toggled = [];
     const clickFunction = function (event) {
-        console.log(event)
-        let el = event.path.find(el => el.classList.contains("field-cell"));
+        let el = event.composedPath().find(el => el.classList.contains("field-cell"));
         el = field.find(element => element.node == el);
         console.log(el);
         el.node.classList.toggle("rotated");
