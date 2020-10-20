@@ -1,7 +1,8 @@
 "use strict";
 
 /* Global vars */
-let transitionDuration = "0.5s";
+// transitionDuration is used in setTimeOut for event changes application and to set transition duration
+let transitionDuration = "0.5s"; 
 /* End of global vars */
 
 function shuffleArray(arr) {
@@ -81,6 +82,7 @@ function createField(fieldSize) {
 }
 
 function createFieldDOM(field) {
+    /* Function creates DOM elements for the field. */
     const sortedfield = field.sort((el1, el2) => {
         return el1.y - el2.y || el1.x - el2.x;
     }
@@ -102,8 +104,16 @@ function createFieldDOM(field) {
     }
     return fieldCellsArr;
 }
+function createRestartButton() {
+    const btn = document.createElement("button");
+    btn.innerHTML = "Restart game";
+    const fieldWrapper = document.querySelector(".field");
+    fieldWrapper.after(btn);
+    return btn;
+}
 
 function setStyles(field) {
+    /* Function is responsible for setting styles of the entire field. */
     const fieldSize = Math.sqrt(field.length);
     const cellSize = (100 - (fieldSize+1)) / fieldSize;
     const fieldDOM = document.querySelector(".field");
@@ -117,6 +127,7 @@ function setStyles(field) {
 }
 
 function setFunctionallity(field) {
+    /* Function is responsible for settiong functionallity of the entered field */
     let toggled = [];
     const clickFunction = function (event) {
         let el = event.composedPath().find(el => el.classList.contains("field-cell"));
@@ -162,14 +173,23 @@ function setFunctionallity(field) {
     });
 }
 
-function initSession() {
+function initSession(isFirstRun) {
+    /* Function starts new session of the game */
     let fieldSize = 0;
     while (!(fieldSize >= 2 && fieldSize <= 12 && fieldSize % 2 == 0)) {
         fieldSize = prompt("Укажите размер поля (чётное число; будет создано поле размером n x n)", 4);
+        if (fieldSize == null && !isFirstRun) {
+            return;
+        }
     }
+    document.querySelector(".field").innerHTML = "";
     const field = createField(fieldSize);
     const cells = document.querySelectorAll(".field-cell");
     cells.forEach(el => { el.style.transitionDuration = transitionDuration });
 }
 
-initSession();
+let isFirstRun = true;
+initSession(isFirstRun);
+isFirstRun = false;
+const btn = createRestartButton();
+btn.addEventListener("click", () => initSession(isFirstRun));
