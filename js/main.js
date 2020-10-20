@@ -109,6 +109,7 @@ function createRestartButton() {
     btn.innerHTML = "Restart game";
     const fieldWrapper = document.querySelector(".field");
     fieldWrapper.after(btn);
+    window.fitText(btn);
     return btn;
 }
 
