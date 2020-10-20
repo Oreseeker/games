@@ -124,6 +124,9 @@ function setStyles(field) {
     });
     fieldDOM.style.gridTemplateColumns = gridStyle;
     fieldDOM.style.gridTemplateRows = gridStyle;
+    // Fitting text with FitText.js
+    const fieldCellsFront = document.querySelectorAll(".cell-content-front");
+    fieldCellsFront.forEach(el => window.fitText(el, 0.3));
 }
 
 function setFunctionallity(field) {
